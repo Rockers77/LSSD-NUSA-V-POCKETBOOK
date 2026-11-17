@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>LSSD Operational Pocketbook 2026</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="description" content="Los Santos County Sheriff's Department - Communication & Patrol Operations Pocketbook (2026 Edition)">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <!-- Tema Dark/Modern atau Vue -->
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+  <style>
+    :root {
+      --theme-color: #1b365d; /* LSSD Navy Blue */
+    }
+    .sidebar-nav > ul > li > p {
+      font-weight: 700;
+      color: #1b365d;
+      text-transform: uppercase;
+      font-size: 0.85em;
+      margin-top: 15px;
+    }
+    table {
+      width: 100%;
+      display: table;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">Memuat LSSD Pocketbook...</div>
+  <script>
+    window.$docsify = {
+      name: '<b>LSSD POCKETBOOK</b>',
+      repo: '',
+      loadSidebar: true,
+      subMaxLevel: 3,
+      auto2top: true,
+      search: {
+        maxAge: 86400000,
+        paths: 'auto',
+        placeholder: 'Cari 10-Code, Callsign, SOP...',
+        noData: 'Data tidak ditemukan!',
+        depth: 6
+      }
+    }
+  </script>
+  <!-- Docsify Core & Search Plugin -->
+  <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify-copy-code/dist/docsify-copy-code.min.js"></script>
+</body>
+</html>
