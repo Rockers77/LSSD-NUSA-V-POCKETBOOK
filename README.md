@@ -1,7 +1,4 @@
 # LSSD Pocketbook — Los Santos County Sheriff's Department (2026 Edition)
-
-Panduan saku digital (*Field Pocketbook*) berbasis web statis untuk personel **Los Santos County Sheriff's Department (LSSD)**. Dirancang ringan, responsif, dan mendukung navigasi tautan langsung (*hash routing*) seperti `#chain-of-command` untuk kebutuhan referensi cepat di lapangan.
-
 ---
 
 ## Dokumen Referensi Resmi
