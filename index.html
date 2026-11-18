@@ -1,1803 +1,436 @@
 <!DOCTYPE html>
-<html lang="id" class="scroll-smooth">
+<html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LSSD Pocketbook — Los Santos County Sheriff's Department (2026)</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
-  <style>
-    :root {
-      --bg-main: #0b0f14;
-      --bg-sidebar: #0f151d;
-      --bg-card: #131b24;
-      --bg-card-hover: #182330;
-      --bg-elevated: #1c2836;
-      --border-subtle: #243242;
-      --border-gold: rgba(212, 175, 55, 0.35);
-
-      --sheriff-olive: #234234;
-      --sheriff-olive-light: #2e5745;
-      --sheriff-gold: #d4af37;
-      --sheriff-gold-bright: #f3cf55;
-      --sheriff-gold-muted: rgba(212, 175, 55, 0.14);
-
-      --text-primary: #f1f5f9;
-      --text-secondary: #94a3b8;
-      --text-muted: #64748b;
-
-      --danger: #ef4444;
-      --danger-bg: rgba(239, 68, 68, 0.14);
-      --warning: #f59e0b;
-      --warning-bg: rgba(245, 158, 11, 0.14);
-      --success: #10b981;
-      --success-bg: rgba(16, 185, 129, 0.14);
-      --info: #38bdf8;
-      --info-bg: rgba(56, 189, 248, 0.14);
-
-      --sidebar-width: 285px;
-      --header-height: 64px;
-      --radius-md: 10px;
-      --radius-lg: 14px;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background-color: var(--bg-main);
-      color: var(--text-primary);
-      line-height: 1.6;
-      overflow-x: hidden;
-    }
-
-    code, .mono {
-      font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
-    }
-
-    /* Scrollbar */
-    ::-webkit-scrollbar {
-      width: 7px;
-      height: 7px;
-    }
-    ::-webkit-scrollbar-track {
-      background: var(--bg-main);
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #283747;
-      border-radius: 99px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: var(--sheriff-gold);
-    }
-
-    /* Mobile Topbar */
-    .mobile-header {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: var(--header-height);
-      background: rgba(15, 21, 29, 0.95);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--border-subtle);
-      padding: 0 16px;
-      align-items: center;
-      justify-content: space-between;
-      z-index: 1000;
-    }
-
-    .mobile-brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 800;
-      font-size: 0.95rem;
-      letter-spacing: 0.04em;
-      color: var(--sheriff-gold-bright);
-    }
-
-    .menu-toggle {
-      background: var(--bg-elevated);
-      border: 1px solid var(--border-subtle);
-      color: var(--text-primary);
-      width: 40px;
-      height: 40px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-    }
-
-    /* Layout */
-    .app-layout {
-      display: flex;
-      min-height: 100vh;
-    }
-
-    /* Sidebar */
-    .sidebar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      bottom: 0;
-      width: var(--sidebar-width);
-      background: var(--bg-sidebar);
-      border-right: 1px solid var(--border-subtle);
-      display: flex;
-      flex-direction: column;
-      z-index: 950;
-      transition: transform 0.25s ease;
-    }
-
-    .sidebar-header {
-      padding: 20px 18px 16px;
-      background: linear-gradient(160deg, var(--sheriff-olive) 0%, #101922 95%);
-      border-bottom: 1px solid var(--border-gold);
-    }
-
-    .brand-row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .badge-icon {
-      width: 44px;
-      height: 44px;
-      flex-shrink: 0;
-      filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6));
-    }
-
-    .brand-title {
-      font-size: 0.95rem;
-      font-weight: 800;
-      letter-spacing: 0.03em;
-      color: #ffffff;
-      line-height: 1.2;
-    }
-
-    .brand-sub {
-      font-size: 0.72rem;
-      color: var(--sheriff-gold-bright);
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      margin-top: 3px;
-    }
-
-    .sidebar-search {
-      padding: 12px 14px;
-      border-bottom: 1px solid var(--border-subtle);
-      position: relative;
-    }
-
-    .sidebar-search input {
-      width: 100%;
-      background: var(--bg-main);
-      border: 1px solid var(--border-subtle);
-      border-radius: 8px;
-      padding: 8px 32px 8px 12px;
-      color: var(--text-primary);
-      font-size: 0.84rem;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-
-    .sidebar-search input:focus {
-      border-color: var(--sheriff-gold);
-    }
-
-    .search-kbd {
-      position: absolute;
-      right: 22px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      background: var(--bg-elevated);
-      padding: 1px 6px;
-      border-radius: 4px;
-      border: 1px solid var(--border-subtle);
-      pointer-events: none;
-    }
-
-    .sidebar-nav {
-      flex: 1;
-      overflow-y: auto;
-      padding: 12px 10px 24px;
-    }
-
-    .nav-group-label {
-      font-size: 0.68rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.09em;
-      color: var(--text-muted);
-      padding: 10px 10px 6px;
-    }
-
-    .nav-link {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 8px 11px;
-      margin-bottom: 2px;
-      border-radius: 8px;
-      color: var(--text-secondary);
-      text-decoration: none;
-      font-size: 0.84rem;
-      font-weight: 500;
-      border-left: 3px solid transparent;
-      transition: all 0.18s ease;
-    }
-
-    .nav-link:hover {
-      background: var(--bg-card-hover);
-      color: var(--text-primary);
-    }
-
-    .nav-link.active {
-      background: var(--sheriff-gold-muted);
-      color: var(--sheriff-gold-bright);
-      border-left-color: var(--sheriff-gold);
-      font-weight: 600;
-    }
-
-    .nav-code-tag {
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    .nav-link.active .nav-code-tag {
-      color: var(--sheriff-gold);
-    }
-
-    .sidebar-footer {
-      padding: 12px 16px;
-      border-top: 1px solid var(--border-subtle);
-      font-size: 0.72rem;
-      color: var(--text-muted);
-      background: #0c1117;
-    }
-
-    /* Overlay for mobile */
-    .sidebar-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.65);
-      z-index: 900;
-    }
-
-    /* Main Content */
-    .main-content {
-      margin-left: var(--sidebar-width);
-      flex: 1;
-      padding: 28px 36px 80px;
-      max-width: 1220px;
-    }
-
-    /* Hero Banner */
-    .hero-banner {
-      background: linear-gradient(135deg, var(--sheriff-olive) 0%, #14222f 58%, #0f151d 100%);
-      border: 1px solid var(--border-gold);
-      border-radius: var(--radius-lg);
-      padding: 26px 28px;
-      margin-bottom: 26px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero-top {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 12px;
-    }
-
-    .doc-pill {
-      font-size: 0.72rem;
-      font-weight: 700;
-      padding: 3px 10px;
-      border-radius: 99px;
-      background: rgba(212, 175, 55, 0.16);
-      color: var(--sheriff-gold-bright);
-      border: 1px solid var(--border-gold);
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    .hero-banner h1 {
-      font-size: 1.65rem;
-      font-weight: 800;
-      letter-spacing: -0.01em;
-      color: #ffffff;
-      margin-bottom: 6px;
-    }
-
-    .hero-banner p {
-      color: #cbd5e1;
-      font-size: 0.92rem;
-      max-width: 780px;
-    }
-
-    .quick-jump {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 18px;
-    }
-
-    .quick-jump a {
-      text-decoration: none;
-      font-size: 0.78rem;
-      font-weight: 600;
-      color: var(--text-primary);
-      background: rgba(15, 21, 29, 0.75);
-      border: 1px solid var(--border-subtle);
-      padding: 6px 12px;
-      border-radius: 8px;
-      transition: all 0.18s;
-    }
-
-    .quick-jump a:hover {
-      border-color: var(--sheriff-gold);
-      color: var(--sheriff-gold-bright);
-    }
-
-    /* Search Result Status Banner */
-    .search-status {
-      display: none;
-      align-items: center;
-      justify-content: space-between;
-      background: var(--bg-elevated);
-      border: 1px solid var(--sheriff-gold);
-      border-radius: var(--radius-md);
-      padding: 10px 16px;
-      margin-bottom: 20px;
-      font-size: 0.86rem;
-    }
-
-    .search-status.visible {
-      display: flex;
-    }
-
-    .btn-clear {
-      background: var(--sheriff-gold);
-      color: #0b0f14;
-      border: none;
-      font-weight: 700;
-      font-size: 0.76rem;
-      padding: 5px 10px;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    /* Sections */
-    .handbook-section {
-      margin-bottom: 42px;
-      scroll-margin-top: 24px;
-    }
-
-    .section-header {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 10px;
-      padding-bottom: 12px;
-      margin-bottom: 18px;
-      border-bottom: 1px solid var(--border-subtle);
-    }
-
-    .section-kicker {
-      font-size: 0.74rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--sheriff-gold);
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    .section-title {
-      font-size: 1.32rem;
-      font-weight: 800;
-      color: #ffffff;
-      margin-top: 2px;
-    }
-
-    .section-source {
-      font-size: 0.74rem;
-      color: var(--text-muted);
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    /* Notice / Policy Box */
-    .policy-callout {
-      background: var(--bg-card);
-      border-left: 4px solid var(--sheriff-gold);
-      border-top: 1px solid var(--border-subtle);
-      border-right: 1px solid var(--border-subtle);
-      border-bottom: 1px solid var(--border-subtle);
-      border-radius: 8px;
-      padding: 14px 16px;
-      margin-bottom: 18px;
-      font-size: 0.86rem;
-      color: var(--text-secondary);
-    }
-
-    .policy-callout strong {
-      color: var(--text-primary);
-    }
-
-    /* Chain of Command Tiers */
-    .tier-block {
-      margin-bottom: 22px;
-    }
-
-    .tier-label {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.76rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.07em;
-      color: var(--sheriff-gold-bright);
-      background: var(--sheriff-gold-muted);
-      border: 1px solid var(--border-gold);
-      padding: 4px 12px;
-      border-radius: 6px;
-      margin-bottom: 12px;
-    }
-
-    .grid-cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
-      gap: 14px;
-    }
-
-    .cmd-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      padding: 15px 16px;
-      transition: transform 0.16s ease, border-color 0.16s ease, background 0.16s ease;
-      position: relative;
-    }
-
-    .cmd-card:hover {
-      background: var(--bg-card-hover);
-      border-color: var(--border-gold);
-      transform: translateY(-2px);
-    }
-
-    .cmd-card.executive {
-      border-color: var(--border-gold);
-      background: linear-gradient(180deg, rgba(35, 66, 52, 0.32) 0%, var(--bg-card) 100%);
-    }
-
-    .cmd-card-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      margin-bottom: 8px;
-    }
-
-    .unit-badge {
-      font-family: 'JetBrains Mono', monospace;
-      font-weight: 700;
-      font-size: 0.84rem;
-      padding: 3px 9px;
-      border-radius: 6px;
-      background: var(--sheriff-olive);
-      color: var(--sheriff-gold-bright);
-      border: 1px solid var(--border-gold);
-    }
-
-    .sec-ref {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.72rem;
-      color: var(--text-muted);
-    }
-
-    .cmd-role {
-      font-size: 0.98rem;
-      font-weight: 700;
-      color: #ffffff;
-      margin-bottom: 6px;
-    }
-
-    .cmd-desc {
-      font-size: 0.82rem;
-      color: var(--text-secondary);
-      line-height: 1.5;
-    }
-
-    /* Tables */
-    .table-wrap {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      overflow-x: auto;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      text-align: left;
-      font-size: 0.86rem;
-    }
-
-    th {
-      background: var(--bg-elevated);
-      color: var(--sheriff-gold-bright);
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      padding: 12px 15px;
-      border-bottom: 1px solid var(--border-subtle);
-      white-space: nowrap;
-    }
-
-    td {
-      padding: 11px 15px;
-      border-bottom: 1px solid var(--border-subtle);
-      color: var(--text-primary);
-      vertical-align: top;
-    }
-
-    tr:last-child td {
-      border-bottom: none;
-    }
-
-    tr:hover td {
-      background: rgba(255, 255, 255, 0.02);
-    }
-
-    /* Filter Tabs */
-    .filter-bar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 14px;
-    }
-
-    .filter-btn {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      color: var(--text-secondary);
-      font-size: 0.78rem;
-      font-weight: 600;
-      padding: 6px 12px;
-      border-radius: 99px;
-      cursor: pointer;
-      transition: all 0.16s;
-    }
-
-    .filter-btn:hover {
-      border-color: var(--sheriff-gold);
-      color: var(--text-primary);
-    }
-
-    .filter-btn.active {
-      background: var(--sheriff-gold);
-      border-color: var(--sheriff-gold);
-      color: #0b0f14;
-    }
-
-    /* 10-Codes Grid */
-    .tencode-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(235px, 1fr));
-      gap: 10px;
-    }
-
-    .tencode-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: 8px;
-      padding: 10px 13px;
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-
-    .tencode-item:hover {
-      border-color: var(--sheriff-gold);
-      background: var(--bg-card-hover);
-    }
-
-    .tencode-item.emergency {
-      border-left: 3px solid var(--danger);
-    }
-
-    .tencode-code {
-      font-family: 'JetBrains Mono', monospace;
-      font-weight: 700;
-      font-size: 0.86rem;
-      color: var(--sheriff-gold-bright);
-      white-space: nowrap;
-    }
-
-    .tencode-item.emergency .tencode-code {
-      color: #fca5a5;
-    }
-
-    .tencode-meaning {
-      font-size: 0.83rem;
-      color: var(--text-primary);
-      text-align: right;
-    }
-
-    /* Response & Priority Cards */
-    .status-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(245px, 1fr));
-      gap: 14px;
-    }
-
-    .status-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      padding: 16px;
-    }
-
-    .status-card.code-0, .status-card.prio-1 {
-      border-top: 4px solid var(--danger);
-    }
-    .status-card.code-2, .status-card.prio-2 {
-      border-top: 4px solid var(--warning);
-    }
-    .status-card.code-3 {
-      border-top: 4px solid var(--info);
-    }
-    .status-card.code-4, .status-card.prio-3 {
-      border-top: 4px solid var(--success);
-    }
-
-    .status-tag {
-      display: inline-block;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.78rem;
-      font-weight: 700;
-      padding: 3px 9px;
-      border-radius: 6px;
-      margin-bottom: 8px;
-    }
-
-    .code-0 .status-tag, .prio-1 .status-tag {
-      background: var(--danger-bg);
-      color: #fca5a5;
-    }
-    .code-2 .status-tag, .prio-2 .status-tag {
-      background: var(--warning-bg);
-      color: #fcd34d;
-    }
-    .code-3 .status-tag {
-      background: var(--info-bg);
-      color: #7dd3fc;
-    }
-    .code-4 .status-tag, .prio-3 .status-tag {
-      background: var(--success-bg);
-      color: #6ee7b7;
-    }
-
-    /* Miranda Warning Cards */
-    .miranda-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
-      gap: 16px;
-    }
-
-    .miranda-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-gold);
-      border-radius: var(--radius-md);
-      padding: 18px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .miranda-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 12px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid var(--border-subtle);
-    }
-
-    .miranda-list {
-      padding-left: 20px;
-      color: var(--text-primary);
-      font-size: 0.88rem;
-      margin-bottom: 16px;
-    }
-
-    .miranda-list li {
-      margin-bottom: 7px;
-    }
-
-    .btn-copy {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      background: var(--sheriff-olive);
-      color: var(--sheriff-gold-bright);
-      border: 1px solid var(--border-gold);
-      border-radius: 8px;
-      padding: 8px 14px;
-      font-size: 0.8rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.16s;
-    }
-
-    .btn-copy:hover {
-      background: var(--sheriff-olive-light);
-    }
-
-    /* SOP Lists & Procedures */
-    .sop-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 16px;
-    }
-
-    .sop-box {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      padding: 18px;
-    }
-
-    .sop-box h3 {
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--sheriff-gold-bright);
-      margin-bottom: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .sop-list {
-      padding-left: 18px;
-      font-size: 0.85rem;
-      color: var(--text-secondary);
-    }
-
-    .sop-list li {
-      margin-bottom: 6px;
-    }
-
-    .sop-list li strong {
-      color: var(--text-primary);
-    }
-
-    .pill-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 8px;
-    }
-
-    .pill-tag {
-      font-size: 0.76rem;
-      background: var(--bg-elevated);
-      border: 1px solid var(--border-subtle);
-      color: var(--text-primary);
-      padding: 4px 10px;
-      border-radius: 6px;
-    }
-
-    /* Toast */
-    .toast {
-      position: fixed;
-      bottom: 22px;
-      right: 22px;
-      background: var(--sheriff-olive);
-      color: #ffffff;
-      border: 1px solid var(--sheriff-gold);
-      padding: 10px 16px;
-      border-radius: 8px;
-      font-size: 0.84rem;
-      font-weight: 600;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-      opacity: 0;
-      transform: translateY(12px);
-      pointer-events: none;
-      transition: all 0.22s ease;
-      z-index: 2000;
-    }
-
-    .toast.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .hidden-by-search {
-      display: none !important;
-    }
-
-    /* Responsive */
-    @media (max-width: 960px) {
-      .mobile-header {
-        display: flex;
-      }
-
-      .sidebar {
-        transform: translateX(-100%);
-      }
-
-      .sidebar.open {
-        transform: translateX(0);
-      }
-
-      .sidebar-overlay.open {
-        display: block;
-      }
-
-      .main-content {
-        margin-left: 0;
-        padding: calc(var(--header-height) + 20px) 16px 64px;
-      }
-
-      .hero-banner {
-        padding: 20px;
-      }
-
-      .hero-banner h1 {
-        font-size: 1.32rem;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LSSD Field Pocketbook — Reference | Joshua Knox</title>
+    
+    <!-- Google Fonts: Barlow Condensed (Headings), Inter (Body), JetBrains Mono (Doc Numbers) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="./style.css">
 </head>
 <body>
 
-  <!-- Mobile Top Header -->
-  <header class="mobile-header">
-    <div class="mobile-brand">
-      <svg width="28" height="28" viewBox="0 0 100 100" aria-hidden="true">
-        <polygon points="50,3 63,27 91,27 77,50 91,73 63,73 50,97 37,73 9,73 23,50 9,27 37,27" fill="#d4af37" stroke="#f3cf55" stroke-width="3"/>
-        <circle cx="50" cy="50" r="24" fill="#182c44" stroke="#d4af37" stroke-width="3"/>
-        <circle cx="50" cy="50" r="14" fill="#f5e6c4"/>
-      </svg>
-      <span>LSSD POCKETBOOK</span>
+    <!-- Mobile Top Header -->
+    <header class="mobile-header">
+        <div class="mobile-brand">
+            <img src="./assets/lssd-logo.png" alt="LSSD Badge" class="mobile-logo">
+            <span>LSSD FIELD POCKETBOOK</span>
+        </div>
+        <button class="hamburger-btn" id="hamburger-btn" aria-label="Toggle Navigation" aria-expanded="false">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </header>
+
+    <!-- Main Binder Layout -->
+    <div class="app-layout">
+        
+        <!-- Left Fixed Sidebar (Document Index) -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-top">
+                <div class="doc-serial">DOC-ID: LSSD-FPM-2026</div>
+                <div class="sidebar-brand">
+                    <img src="./assets/lssd-logo.png" alt="Los Santos County Sheriff Seal" class="sidebar-logo">
+                    <div>
+                        <div class="sidebar-title">LOS SANTOS COUNTY</div>
+                        <div class="sidebar-subtitle">SHERIFF'S DEPARTMENT</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Global Search Bar in Sidebar -->
+            <div class="sidebar-search">
+                <label for="global-search" class="search-label">SEARCH INDEX // FILTER</label>
+                <div class="search-box">
+                    <input type="text" id="global-search" placeholder="Cari rank, 10-code, SOP..." autocomplete="off">
+                    <button id="clear-search" title="Reset">✕</button>
+                </div>
+                <div class="search-status" id="search-status">ALL SECTIONS VISIBLE</div>
+            </div>
+
+            <!-- Document Table of Contents -->
+            <nav class="sidebar-nav" id="sidebar-nav">
+                <div class="nav-group-label">TABLE OF CONTENTS</div>
+                <a href="#homepage" class="nav-link active" data-target="homepage">
+                    <span class="doc-num">00</span>
+                    <span class="doc-name">COVER & DIRECTIVE</span>
+                </a>
+                <a href="#chain-of-command" class="nav-link" data-target="chain-of-command">
+                    <span class="doc-num">01</span>
+                    <span class="doc-name">CHAIN OF COMMAND</span>
+                </a>
+                <a href="#radio-codes" class="nav-link" data-target="radio-codes">
+                    <span class="doc-num">02</span>
+                    <span class="doc-name">10-CODES & BREVITY</span>
+                </a>
+                <a href="#field-sop" class="nav-link" data-target="field-sop">
+                    <span class="doc-num">03</span>
+                    <span class="doc-name">PATROL & TRAFFIC PROCEDURE</span>
+                </a>
+                <a href="#miranda-rights" class="nav-link" data-target="miranda-rights">
+                    <span class="doc-num">04</span>
+                    <span class="doc-name">MIRANDA RIGHT & ARREST</span>
+                </a>
+                <a href="#about-manual" class="nav-link" data-target="about-manual">
+                    <span class="doc-num">05</span>
+                    <span class="doc-name">ABOUT</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div>DEPUTY: <strong>JOSHUA KNOX</strong></div>
+                <div>CLASSIFICATION: <strong>DEPUTY USE ONLY</strong></div>
+            </div>
+        </aside>
+
+        <!-- Backdrop for Mobile Sidebar -->
+        <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+        <!-- Right Main Document Content -->
+        <main class="main-content">
+            
+            <!-- Top Classification Strip -->
+            <div class="top-strip">
+                <span>LOS SANTOS SHERIFF'S DEPARTMENT — FIELD OPERATIONS MANUAL</span>
+                <span>EDITION: 2026 // COMPILED BY JOSHUA KNOX</span>
+            </div>
+
+            <!-- SECTION 00: HOMEPAGE / OFFICIAL COVER -->
+            <section id="homepage" class="doc-section hero-cover searchable-block">
+                <div class="section-meta-bar">
+                    <span>SEC-00 // DEPARTMENTAL COVER SHEET</span>
+                    <span>STATUS: ACTIVE DIRECTIVE</span>
+                </div>
+
+                <div class="cover-container">
+                    <div class="cover-emblem">
+                        <img src="./assets/lssd-logo.png" alt="Sheriff Los Santos County Official Badge">
+                    </div>
+
+                    <div class="cover-info">
+                        <div class="cover-agency">COUNTY OF LOS SANTOS • STATE OF SAN ANDREAS</div>
+                        <h1 class="cover-title">SHERIFF'S DEPARTMENT FIELD POCKETBOOK</h1>
+                        <p class="cover-desc">
+                            Pocketbook referensi taktis bagi seluruh Deputy di lapangan. Berisi struktur, protokol komunikasi radio, standar operasional prosedur (SOP) patroli, serta pedoman hak konstitusional penangkapan.
+                        </p>
+
+                        <div class="cover-actions">
+                            <a href="#chain-of-command" class="btn-official btn-primary">BUKA CHAIN OF COMMAND</a>
+                            <a href="#radio-codes" class="btn-official btn-outline">REFERENSI 10-CODES</a>
+                        </div>
+
+                        <div class="cover-specs">
+                            <div class="spec-item">
+                                <span class="spec-key">ISSUING AUTHORITY</span>
+                                <span class="spec-val">LOS SANTOS SHERIFF DEPARTMENT</span>
+                            </div>
+                            <div class="spec-item">
+                                <span class="spec-key">TARGET PERSONNEL</span>
+                                <span class="spec-val">LSSD SWORN DEPUTIES</span>
+                            </div>
+                            <div class="spec-item">
+                                <span class="spec-key">DOCUMENT REV</span>
+                                <span class="spec-val">REV-2026.11</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 01: CHAIN OF COMMAND -->
+            <section id="chain-of-command" class="doc-section searchable-block">
+                <div class="section-meta-bar">
+                    <span>SEC-01 // ORGANIZATIONAL HIERARCHY</span>
+                    <span>REF: LSSD-COC-01</span>
+                </div>
+                <h2 class="section-heading">01. CHAIN OF COMMAND</h2>
+                <p class="section-lead">
+                    CoC (Chain of Command) adalah struktur hierarki atau rantai komando yang mengatur urutan jabatan, wewenang, tanggung jawab, dan jalur pelaporan anggota kepolisian di dalam departemen. Tujuannya agar seluruh anggota kepolisian bekerja secara terorganisir, disiplin, dan mengikuti prosedur yang berlaku.
+                </p>
+
+                <!-- Tier 1: Executive Command -->
+                <div class="tier-block searchable-item">
+                    <div class="tier-header">
+                        <span class="tier-code">TIER I</span>
+                        <span class="tier-name">EXECUTIVE COMMAND STAFF</span>
+                    </div>
+                    <table class="doc-table">
+                        <thead>
+                            <tr>
+                                <th width="16%">CODE / GRADE</th>
+                                <th width="34%">RANK TITLE</th>
+                                <th width="50%">OPERATIONAL AUTHORITY & JURISDICTION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="mono">EXEC-01</td>
+                                <td><strong>Sheriff</strong></td>
+                                <td>Pimpinan tertinggi Departemen Sheriff Los Santos County; penentu kebijakan strategis dan yurisdiksi penuh.</td>
+                            </tr>
+                            <tr>
+                                <td class="mono">EXEC-02</td>
+                                <td><strong>Undersheriff</strong></td>
+                                <td>Wakil pimpinan tertinggi departemen; mengawasi operasional harian seluruh divisi dan bertindak sebagai Pejabat Sheriff bila berhalangan.</td>
+                            </tr>
+                            <tr>
+                                <td class="mono">EXEC-03</td>
+                                <td><strong>Assistant Sheriff</strong></td>
+                                <td>Mengkoordinasikan biro operasional patroli, investigasi kriminal, dan administrasi sumber daya departemen.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Tier 2: Division & Area Command -->
+                <div class="tier-block searchable-item">
+                    <div class="tier-header">
+                        <span class="tier-code">TIER II</span>
+                        <span class="tier-name">COMMAND STAFF (DIVISION & STATION)</span>
+                    </div>
+                    <table class="doc-table">
+                        <thead>
+                            <tr>
+                                <th width="16%">CODE / GRADE</th>
+                                <th width="34%">RANK TITLE</th>
+                                <th width="50%">OPERATIONAL AUTHORITY & JURISDICTION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="mono">CMD-01</td>
+                                <td><strong>Division Chief</strong></td>
+                                <td>Memimpin komando tingkat biro/divisi (Patrol Division, Detective Division, Special Enforcement).</td>
+                            </tr>
+                            <tr>
+                                <td class="mono">CMD-02</td>
+                                <td><strong>Area Commander</strong></td>
+                                <td>Mengawasi operasi lintas stasiun patroli regional dan koordinasi taktis skala besar.</td>
+                            </tr>
+                            <tr>
+                                <td class="mono">CMD-03</td>
+                                <td><strong>Captain</strong></td>
+                                <td>Komandan Stasiun (Station Commander); bertanggung jawab penuh atas kesiapan unit dan personel di stasiun wilayah.</td>
+                            </tr>
+                            <tr>
+                                <td class="mono">CMD-04</td>
+                                <td><strong>Lieutenant</strong></td>
+                                <td>Watch Commander; memimpin shift patroli harian, menyetujui operasi taktis, dan mengaudit laporan insiden.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Tier 3: Supervisory & Field Personnel -->
+                <div class="tier-block searchable-item">
+                    <div class="tier-header">
+                        <span class="tier-code">TIER III</span>
+                        <span class="tier-name">FIELD SUPERVISORS & SWORN DEPUTIES</span>
+                    </div>
+                    <table class="doc-table">
+                        <thead>
+                            <tr>
+                                <th width="16%">CODE / GRADE</th>
+                                <th width="34%">RANK TITLE</th>
+                                <th width="50%">OPERATIONAL AUTHORITY & JURISDICTION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="mono">SUP-01</td>
+                                <td><strong>Sergeant</strong></td>
+                                <td>Field Supervisor; mengawasi langsung kinerja Deputy di lapangan, memimpin TKP aktif, dan melakukan briefing shift.</td>
+                            </tr>
+                            <tr>
+                                <td class="mono">FLD-01</td>
+                                <td><strong>Senior Deputy / Bonus II</strong></td>
+                                <td>Field Training Officer (FTO) & personel senior; membimbing Deputy baru serta memimpin unit taktis lapangan.</td>
+                            </tr>
+                            <tr>
+                                <td class="mono">FLD-02</td>
+                                <td><strong>Deputy Sheriff (Generalist)</strong></td>
+                                <td>Pelaksana utama tugas patroli, penegakan lalu lintas, respons panggilan 911, dan penangkapan awal.</td>
+                            </tr>
+                            <tr>
+                                <td class="mono">TRN-01</td>
+                                <td><strong>Deputy Sheriff Trainee</strong></td>
+                                <td>Personel masa percobaan lapangan di bawah pengawasan langsung Field Training Officer (FTO).</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- SECTION 02: 10-CODES & RADIO BREVITY -->
+            <section id="radio-codes" class="doc-section searchable-block">
+                <div class="section-meta-bar">
+                    <span>SEC-02 // COMMUNICATIONS PROTOCOL</span>
+                    <span>REF: LSSD-COM-02</span>
+                </div>
+                <h2 class="section-heading">02. 10-CODES & RADIO BREVITY</h2>
+                <p class="section-lead">
+                    Gunakan transmisi radio yang singkat, jelas, dan profesional. Dahulukan callsign unit sebelum menyampaikan kode situasi dan lokasi.
+                </p>
+
+                <div class="codes-grid">
+                    <div class="code-card searchable-item">
+                        <div class="code-badge">10-4</div>
+                        <div class="code-detail">
+                            <strong>ACKNOWLEDGED / AFFIRMATIVE</strong>
+                            <span>Pesan diterima dan dimengerti sepenuhnya.</span>
+                        </div>
+                    </div>
+                    <div class="code-card searchable-item">
+                        <div class="code-badge">10-7</div>
+                        <div class="code-detail">
+                            <strong>OUT OF SERVICE</strong>
+                            <span>Unit tidak tersedia untuk panggilan tugas (istirahat / administrasi).</span>
+                        </div>
+                    </div>
+                    <div class="code-card searchable-item">
+                        <div class="code-badge">10-8</div>
+                        <div class="code-detail">
+                            <strong>IN SERVICE / AVAILABLE</strong>
+                            <span>Unit aktif berpatroli dan siap menerima panggilan dispatch.</span>
+                        </div>
+                    </div>
+                    <div class="code-card searchable-item">
+                        <div class="code-badge">10-15</div>
+                        <div class="code-detail">
+                            <strong>PRISONER IN CUSTODY</strong>
+                            <span>Membawa tersangka dalam tahanan menuju stasiun / fasilitas penahanan.</span>
+                        </div>
+                    </div>
+                    <div class="code-card searchable-item">
+                        <div class="code-badge">10-20</div>
+                        <div class="code-detail">
+                            <strong>CURRENT LOCATION</strong>
+                            <span>Menanyakan atau melaporkan posisi geografis unit saat ini.</span>
+                        </div>
+                    </div>
+                    <div class="code-card searchable-item">
+                        <div class="code-badge">10-55</div>
+                        <div class="code-detail">
+                            <strong>TRAFFIC STOP</strong>
+                            <span>Melakukan pemberhentian kendaraan rutin (sertakan lokasi & plat nomor).</span>
+                        </div>
+                    </div>
+                    <div class="code-card searchable-item">
+                        <div class="code-badge">10-80</div>
+                        <div class="code-detail">
+                            <strong>ACTIVE PURSUIT</strong>
+                            <span>Pengejaran kendaraan aktif (laporkan arah laju, kecepatan, & deskripsi target).</span>
+                        </div>
+                    </div>
+                    <div class="code-card searchable-item">
+                        <div class="code-badge code-alert">10-99</div>
+                        <div class="code-detail">
+                            <strong>OFFICER IN DISTRESS / EMERGENCY</strong>
+                            <span>Situasi darurat mengancam nyawa petugas; seluruh unit wajib merespons Code 3.</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 03: PATROL & TRAFFIC SOP -->
+            <section id="field-sop" class="doc-section searchable-block">
+                <div class="section-meta-bar">
+                    <span>SEC-03 // STANDARD OPERATING PROCEDURES</span>
+                    <span>REF: LSSD-SOP-03</span>
+                </div>
+                <h2 class="section-heading">03. PATROL & TRAFFIC STOP SOP</h2>
+
+                <div class="sop-list">
+                    <div class="sop-item searchable-item">
+                        <div class="sop-header">
+                            <span class="sop-num">SOP 3.1</span>
+                            <h3>ROUTINE TRAFFIC STOP (10-55)</h3>
+                        </div>
+                        <ol class="sop-steps">
+                            <li>Nyalakan lampu rotator dan sirine singkat untuk memberi sinyal kendaraan target menepi ke bahu jalan yang aman.</li>
+                            <li>Posisikan cruiser sekitar 1 hingga 1,5 panjang mobil di belakang target dengan sudut serong 15 derajat ke kiri sebagai perlindungan lalu lintas.</li>
+                            <li>Laporkan <strong>10-55</strong> ke radio beserta lokasi jalan, warna, tipe kendaraan, nomor plat, dan jumlah penumpang sebelum keluar dari cruiser.</li>
+                            <li>Dekati kendaraan dari sisi yang aman, perkenalkan identitas dan asal departemen dengan sopan, lalu sampaikan alasan pemberhentian.</li>
+                        </ol>
+                    </div>
+
+                    <div class="sop-item searchable-item">
+                        <div class="sop-header">
+                            <span class="sop-num">SOP 3.2</span>
+                            <h3>HIGH-RISK / FELONY STOP</h3>
+                        </div>
+                        <ol class="sop-steps">
+                            <li>Jangan mendekati kendaraan tersangka sendirian. Tunggu minimal 2 hingga 3 unit cadangan tiba di lokasi perimeter.</li>
+                            <li>Posisikan seluruh cruiser membentuk formasi kipas taktis dan gunakan pintu kendaraan sebagai perlindungan (*hard cover*).</li>
+                            <li>Gunakan sistem PA (pengeras suara) untuk memerintahkan pengemudi mematikan mesin, melempar kunci keluar jendela, dan keluar dengan tangan terangkat.</li>
+                            <li>Perintahkan tersangka berjalan mundur ke arah suara petugas sebelum dilakukan pemborgolan dan penggeledahan badan.</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 04: MIRANDA RIGHTS -->
+            <section id="miranda-rights" class="doc-section searchable-block">
+                <div class="section-meta-bar">
+                    <span>SEC-04 // CONSTITUTIONAL ADVISEMENT</span>
+                    <span>REF: LSSD-LEG-04</span>
+                </div>
+                <h2 class="section-heading">04. MIRANDA WARNING & ARREST PROTOCOL</h2>
+                <p class="section-lead">
+                    Wajib dibacakan secara utuh dan jelas kepada tersangka yang berada dalam tahanan (*in custody*) sebelum mengajukan pertanyaan interogasi apa pun.
+                </p>
+
+                <blockquote class="miranda-box searchable-item">
+                    <div class="miranda-label">OFFICIAL VERBATIM SCRIPT — READ ALOUD TO DETAINEE</div>
+                    <p>
+                        "Anda memiliki hak untuk tetap diam. Apa pun yang Anda katakan dapat dan akan digunakan untuk melawan Anda di pengadilan. Anda berhak berbicara dengan pengacara dan didampingi pengacara saat diinterogasi. Jika Anda tidak mampu menyewa pengacara, negara akan menunjuk satu pengacara untuk Anda sebelum interogasi dimulai. Apakah Anda memahami hak-hak yang baru saja saya bacakan?"
+                    </p>
+                </blockquote>
+            </section>
+
+            <!-- SECTION 05: ABOUT & CUSTODIAN -->
+            <section id="about-manual" class="doc-section searchable-block">
+                <div class="section-meta-bar">
+                    <span>SEC-05 // DOCUMENT GOVERNANCE</span>
+                    <span>REF: LSSD-ADM-05</span>
+                </div>
+                <h2 class="section-heading">05. ABOUT THIS POCKETBOOK</h2>
+                
+                <div class="about-box searchable-item">
+                    <p>
+                        <strong>LSSD Field Pocketbook</strong> disusun dan dikelola oleh <strong>Joshua Knox</strong> sebagai panduan saku digital bagi personel Los Santos Sheriff's Department. Dokumen ini dirancang untuk mempermudah akses informasi krusial seperti hirarki Chain of Command, kode komunikasi radio, serta prosedur lapangan secara cepat melalui perangkat mobile maupun MDT (Mobile Data Terminal).
+                    </p>
+                    <div class="about-grid-meta">
+                        <div>
+                            <span class="meta-label">COMPILED BY</span>
+                            <span class="meta-data">Joshua Knox</span>
+                        </div>
+                        <div>
+                            <span class="meta-label">DEPARTMENT</span>
+                            <span class="meta-data">Los Santos Sheriff's Department (LSSD)</span>
+                        </div>
+                        <div>
+                            <span class="meta-label">HOSTING FORMAT</span>
+                            <span class="meta-data">Static Documentation (GitHub Pages Ready)</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Footer -->
+            <footer class="doc-footer">
+                <div>LSSD FIELD POCKETBOOK • LOS SANTOS COUNTY SHERIFF'S DEPARTMENT</div>
+                <div>MAINTAINED BY JOSHUA KNOX • DOC-ID: LSSD-FPM-2026</div>
+            </footer>
+
+        </main>
     </div>
-    <button class="menu-toggle" id="menuToggle" aria-label="Buka Menu Navigasi">
-      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
-      </svg>
-    </button>
-  </header>
 
-  <div class="sidebar-overlay" id="sidebarOverlay"></div>
-
-  <div class="app-layout">
-    <!-- Left Navigation Sidebar -->
-    <aside class="sidebar" id="sidebar">
-      <div class="sidebar-header">
-        <div class="brand-row">
-          <!-- Custom 6-Point Sheriff Star SVG -->
-          <svg class="badge-icon" viewBox="0 0 100 100" aria-hidden="true">
-            <polygon points="50,3 63,27 91,27 77,50 91,73 63,73 50,97 37,73 9,73 23,50 9,27 37,27" fill="#d4af37" stroke="#f3cf55" stroke-width="2.5"/>
-            <circle cx="50" cy="50" r="25" fill="#15263b" stroke="#d4af37" stroke-width="2.5"/>
-            <circle cx="50" cy="50" r="15" fill="#f3e5c2"/>
-            <text x="50" y="53" text-anchor="middle" font-size="9" font-weight="800" fill="#15263b" font-family="Inter, sans-serif">LSSD</text>
-          </svg>
-          <div>
-            <div class="brand-title">LSSD POCKETBOOK</div>
-            <div class="brand-sub">Los Santos County • 2026</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="sidebar-search">
-        <input type="text" id="globalSearch" placeholder="Cari kode, unit, SOP..." autocomplete="off" />
-        <span class="search-kbd">/</span>
-      </div>
-
-      <nav class="sidebar-nav" id="sidebarNav">
-        <div class="nav-group-label">Vol. I — Communications (SOP-00126)</div>
-        <a href="#chain-of-command" class="nav-link active">
-          <span>Chain of Command & Units</span>
-          <span class="nav-code-tag">100</span>
-        </a>
-        <a href="#unit-callsigns" class="nav-link">
-          <span>Unit Callsigns</span>
-          <span class="nav-code-tag">101</span>
-        </a>
-        <a href="#ten-codes" class="nav-link">
-          <span>Standard 10-Codes</span>
-          <span class="nav-code-tag">102</span>
-        </a>
-        <a href="#response-codes" class="nav-link">
-          <span>Response Status Codes</span>
-          <span class="nav-code-tag">103</span>
-        </a>
-        <a href="#miranda-warning" class="nav-link">
-          <span>Miranda Warning</span>
-          <span class="nav-code-tag">104</span>
-        </a>
-        <a href="#radio-discipline" class="nav-link">
-          <span>Radio Conduct & Policy</span>
-          <span class="nav-code-tag">105-106</span>
-        </a>
-
-        <div class="nav-group-label">Patrol Operations (SOP-00226)</div>
-        <a href="#patrol-operations" class="nav-link">
-          <span>Patrol Scope & Jurisdiction</span>
-          <span class="nav-code-tag">2-06/010</span>
-        </a>
-        <a href="#field-procedures" class="nav-link">
-          <span>Scene, Traffic & MDT</span>
-          <span class="nav-code-tag">2-06/030</span>
-        </a>
-        <a href="#priority-response" class="nav-link">
-          <span>Patrol Priority Response</span>
-          <span class="nav-code-tag">030.25</span>
-        </a>
-        <a href="#conduct-shift" class="nav-link">
-          <span>Conduct, Shift & Performance</span>
-          <span class="nav-code-tag">050-070</span>
-        </a>
-      </nav>
-
-      <div class="sidebar-footer">
-        <div><strong>DOC ID:</strong> LSSD-DOC-SOP-00126 & 00226</div>
-        <div>Professional Standards & Patrol Ops</div>
-      </div>
-    </aside>
-
-    <!-- Main Content -->
-    <main class="main-content">
-      <!-- Hero Banner -->
-      <section class="hero-banner">
-        <div class="hero-top">
-          <span class="doc-pill">LSSD-DOC-SOP-00126</span>
-          <span class="doc-pill">LSSD-DOC-SOP-00226</span>
-          <span class="doc-pill">2026 EDITION • INTERNAL USE</span>
-        </div>
-        <h1>Los Santos County Sheriff's Department — Field Pocketbook</h1>
-        <p>Panduan referensi cepat komunikasi radio, struktur komando, kode operasional, Miranda Warning, serta standar prosedur Patrol Operations LSSD.</p>
-        <div class="quick-jump">
-          <a href="#chain-of-command">Chain of Command</a>
-          <a href="#unit-callsigns">Callsigns</a>
-          <a href="#ten-codes">10-Codes</a>
-          <a href="#response-codes">Code 0–4</a>
-          <a href="#miranda-warning">Miranda Warning</a>
-          <a href="#priority-response">Priority Calls</a>
-        </div>
-      </section>
-
-      <!-- Active Search Indicator -->
-      <div class="search-status" id="searchStatus">
-        <span id="searchStatusText">Menampilkan hasil pencarian...</span>
-        <button class="btn-clear" id="clearSearchBtn">Reset Pencarian</button>
-      </div>
-
-      <!-- SECTION 100: CHAIN OF COMMAND & STAFF UNIT DESIGNATIONS -->
-      <section id="chain-of-command" class="handbook-section">
-        <div class="section-header">
-          <div>
-            <div class="section-kicker">SECTION 100 • RADIO UNIT DESIGNATIONS</div>
-            <h2 class="section-title">Chain of Command & Staff Designations</h2>
-          </div>
-          <div class="section-source">Ref: LSSD-DOC-SOP-00126 (100.1 – 100.15)</div>
-        </div>
-
-        <div class="policy-callout searchable-item">
-          <strong>100.1 General Provision:</strong> Radio Unit Designation adalah sistem identifikasi resmi berdasarkan <em>rank</em>, <em>command position</em>, <em>division assignment</em>, atau <em>geographic responsibility</em>. Designation bersifat melekat pada jabatan resmi, tidak dapat dipilih secara pribadi, dipinjamkan, atau disalahgunakan.
-        </div>
-
-        <!-- Tier 1: Executive Command -->
-        <div class="tier-block">
-          <div class="tier-label">Tier I — Executive Command</div>
-          <div class="grid-cards">
-            <div class="cmd-card executive searchable-item">
-              <div class="cmd-card-top">
-                <span class="unit-badge">SHERIFF 00</span>
-                <span class="sec-ref">100.3</span>
-              </div>
-              <div class="cmd-role">Sheriff</div>
-              <div class="cmd-desc">Otoritas eksekutif tertinggi dalam struktur Los Santos Sheriff's Department. Memberikan <em>command direction</em>, instruksi departemen, dan koordinasi operasional utama.</div>
-            </div>
-
-            <div class="cmd-card executive searchable-item">
-              <div class="cmd-card-top">
-                <span class="unit-badge">SHERIFF 01</span>
-                <span class="sec-ref">100.4</span>
-              </div>
-              <div class="cmd-role">Undersheriff</div>
-              <div class="cmd-desc"><em>Senior executive command element</em> yang menjalankan koordinasi komando, arahan departemen, serta kewenangan yang didelegasikan oleh Sheriff.</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Tier 2: Assistant Sheriffs -->
-        <div class="tier-block">
-          <div class="tier-label">Tier II — Assistant Sheriffs</div>
-          <div class="grid-cards">
-            <div class="cmd-card searchable-item">
-              <div class="cmd-card-top">
-                <span class="unit-badge">SHERIFF 02</span>
-                <span class="sec-ref">100.5</span>
-              </div>
-              <div class="cmd-role">Assistant Sheriff — Professional Standards Bureau</div>
-              <div class="cmd-desc">Bertanggung jawab atas pengawasan (<em>oversight</em>) dan arahan administratif yang berkaitan dengan Professional Standards Bureau.</div>
-            </div>
-
-            <div class="cmd-card searchable-item">
-              <div class="cmd-card-top">
-                <span class="unit-badge">SHERIFF 03</span>
-                <span class="sec-ref">100.6</span>
-              </div>
-              <div class="cmd-role">Assistant Sheriff — Patrol Operation</div>
-              <div class="cmd-desc">Memegang kendali arah operasional Patrol Operation, organisasi patroli, kesiapan operasional, dan koordinasi lapangan.</div>
-            </div>
-
-            <div class="cmd-card searchable-item">
-              <div class="cmd-card-top">
-                <span class="unit-badge">SHERIFF 04</span>
-                <span class="sec-ref">100.7</span>
-              </div>
-              <div class="cmd-role">Assistant Sheriff — County Wide</div>
-              <div class="cmd-desc">Menangani tanggung jawab komando lintas wilayah (<em>county-wide</em>) yang melibatkan lebih dari satu area, divisi, atau elemen operasional.</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Tier 3: Division Chiefs -->
-        <div class="tier-block">
-          <div class="tier-label">Tier III — Division Chiefs</div>
-          <div class="grid-cards">
-            <div class="cmd-card searchable-item">
-              <div class="cmd-card-top">
-                <span class="unit-badge">SHERIFF 05</span>
-                <span class="sec-ref">100.8</span>
-              </div>
-              <div class="cmd-role">Division Chief — Internal Affairs</div>
-              <div class="cmd-desc">Bertanggung jawab atas fungsi administratif maupun operasional unit Internal Affairs sesuai struktur departemen.</div>
-            </div>
-
-            <div class="cmd-card searchable-item">
-              <div class="cmd-card-top">
-                <span class="unit-badge">SHERIFF 06</span>
-                <span class="sec-ref">100.9</span>
-              </div>
-              <div class="cmd-role">Division Chief — Human Resources</div>
-              <div class="cmd-desc">Mengelola fungsi Human Resources dan seluruh urusan administrasi kepegawaian berdasarkan kebijakan departemen.</div>
-            </div>
-
-            <div class="cmd-card searchable-item">
-              <div class="cmd-card-top">
-                <span class="unit-badge">SHERIFF 07</span>
-                <span class="sec-ref">100.10</span>
-              </div>
-              <div class="cmd-role">Division Chief — Patrol Operations</div>
-              <div class="cmd-desc">Menjalankan tanggung jawab komando langsung atas Patrol Operations sebagai elemen komando senior dalam struktur patroli.</div>
-            </div>
-
-            <div class="cmd-card searchable-item">
-              <div class="cmd-card-top">
-                <span class="unit-badge">SHERIFF 08</span>
-                <span class="sec-ref">100.11</span>
-              </div>
-              <div class="cmd-role">Division Chief — Detective</div>
-              <div class="cmd-desc">Bertanggung jawab terhadap fungsi detektif dan struktur komando investigasi pada Detective Bureau.</div>
-            </div>
-
-            <div class="cmd-card searchable-item">
-              <div class="cmd-card-top">
-                <span class="unit-badge">SHERIFF 09</span>
-                <span class="sec-ref">100.12</span>
-              </div>
-              <div class="cmd-role">Division Chief — Special Enforcement Bureau</div>
-              <div class="cmd-desc">Memimpin Special Enforcement Bureau (SEB) dan operasi penegakan hukum taktis berisiko tinggi.</div>
-            </div>
-
-            <div class="cmd-card searchable-item">
-              <div class="cmd-card-top">
-                <span class="unit-badge">SHERIFF 10</span>
-                <span class="sec-ref">100.13</span>
-              </div>
-              <div class="cmd-role">Division Chief — Aero</div>
-              <div class="cmd-desc">Bertanggung jawab atas Aero Bureau dan seluruh operasional dukungan udara departemen.</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Tier 4: Area Commanders -->
-        <div class="tier-block">
-          <div class="tier-label">Tier IV — Area Commanders</div>
-          <div class="grid-cards">
-            <div class="cmd-card searchable-item">
-              <div class="cmd-card-top">
-                <span class="unit-badge">ARCHER 01</span>
-                <span class="sec-ref">100.14</span>
-              </div>
-              <div class="cmd-role">Area Commander — Sandy Shores</div>
-              <div class="cmd-desc">Identifikasi komando wilayah bagi Area Commander yang bertanggung jawab atas yurisdiksi Sandy Shores.</div>
-            </div>
-
-            <div class="cmd-card searchable-item">
-              <div class="cmd-card-top">
-                <span class="unit-badge">ARCHER 02</span>
-                <span class="sec-ref">100.15</span>
-              </div>
-              <div class="cmd-role">Area Commander — Blaine County</div>
-              <div class="cmd-desc">Identifikasi komando wilayah bagi Area Commander yang memegang tanggung jawab geografis Blaine County.</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- SECTION 101: UNIT CALLSIGNS -->
-      <section id="unit-callsigns" class="handbook-section">
-        <div class="section-header">
-          <div>
-            <div class="section-kicker">SECTION 101 • PATROL, SPECIALIZED & AVIATION</div>
-            <h2 class="section-title">Unit Callsign Reference</h2>
-          </div>
-          <div class="section-source">Ref: LSSD-DOC-SOP-00126 (101.1 – 101.12)</div>
-        </div>
-
-        <div class="policy-callout searchable-item">
-          <strong>101.1 General Provision:</strong> Callsign membedakan konfigurasi patroli, fungsi khusus, investigasi, maupun dukungan udara agar Dispatch dan Command Staff dapat mengenali unit secara cepat. <strong>Penggunaan callsign tidak memberikan pangkat atau otoritas tambahan.</strong>
-        </div>
-
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Callsign / Designation</th>
-                <th>Kategori / Fungsi</th>
-                <th>Ketentuan Operasional</th>
-                <th>Pasal</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="searchable-item">
-                <td><span class="unit-badge">SHERIFF</span></td>
-                <td><strong>Executive Command</strong></td>
-                <td>Khusus Sheriff dan Executive Command personnel sesuai struktur departemen. Dilarang digunakan oleh personel tanpa penugasan komando resmi.</td>
-                <td class="mono">101.10</td>
-              </tr>
-              <tr class="searchable-item">
-                <td><span class="unit-badge">ALCO / LINCOLN</span></td>
-                <td><strong>Solo Patrol</strong></td>
-                <td>Unit patroli individual (1 personel) untuk <em>routine patrol</em>, <em>traffic enforcement</em>, dan <em>calls for service</em>. Wajib menjaga <em>situational awareness</em> dan meminta bantuan bila situasi eskalatif.</td>
-                <td class="mono">101.3</td>
-              </tr>
-              <tr class="searchable-item">
-                <td><span class="unit-badge">CHARLIE / ADAM</span></td>
-                <td><strong>Duo Patrol</strong></td>
-                <td>Unit patroli beranggotakan 2 personel sebagai satu kesatuan operasional. Tetap tunduk pada struktur supervisor dan tidak memiliki otoritas supervisi otomatis.</td>
-                <td class="mono">101.4</td>
-              </tr>
-              <tr class="searchable-item">
-                <td><span class="unit-badge">RAPTOR / HOTEL</span></td>
-                <td><strong>Specialized Field Unit</strong></td>
-                <td>Penugasan lapangan khusus di luar konfigurasi patroli rutin. Wajib memiliki otorisasi penugasan yang sah.</td>
-                <td class="mono">101.5</td>
-              </tr>
-              <tr class="searchable-item">
-                <td><span class="unit-badge">OSCAR</span></td>
-                <td><strong>Intercept Level 2</strong></td>
-                <td>Unit dengan kapabilitas <em>Intercept Level 2</em> sesuai penugasan resmi di bawah arahan supervisor maupun Command Staff.</td>
-                <td class="mono">101.6</td>
-              </tr>
-              <tr class="searchable-item">
-                <td><span class="unit-badge">REX / MARY</span></td>
-                <td><strong>Specialized Field Unit</strong></td>
-                <td>Identifier operasional untuk personel dengan fungsi khusus departemen; wajib berkoordinasi dengan patroli atau supervisor saat butuh sumber daya tambahan.</td>
-                <td class="mono">101.7</td>
-              </tr>
-              <tr class="searchable-item">
-                <td><span class="unit-badge">GHOST</span></td>
-                <td><strong>Special Enforcement Bureau (SEB)</strong></td>
-                <td>Callsign khusus personel SEB terotorisasi untuk operasi berisiko/kompleksitas tinggi dengan komunikasi radio ringkas dan terkoordinasi.</td>
-                <td class="mono">101.8</td>
-              </tr>
-              <tr class="searchable-item">
-                <td><span class="unit-badge">VICE</span></td>
-                <td><strong>Detective Bureau (DET)</strong></td>
-                <td>Callsign personel Detective terotorisasi. Wajib menjaga kerahasiaan investigasi dan membatasi info sensitif di saluran radio umum.</td>
-                <td class="mono">101.9</td>
-              </tr>
-              <tr class="searchable-item">
-                <td><span class="unit-badge">AERO</span></td>
-                <td><strong>Helicopter Level 1</strong></td>
-                <td>Identifier utama unit udara Helicopter Level 1 pada Aero Bureau untuk koordinasi udara dan dukungan unit darat.</td>
-                <td class="mono">101.11</td>
-              </tr>
-              <tr class="searchable-item">
-                <td><span class="unit-badge">HAWK</span></td>
-                <td><strong>Helicopter Level 2</strong></td>
-                <td>Identifier unit udara Helicopter Level 2 yang membedakan kapabilitas sumber daya penerbangan Level 2 dari Level 1.</td>
-                <td class="mono">101.12</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <!-- SECTION 102: 10-CODES -->
-      <section id="ten-codes" class="handbook-section">
-        <div class="section-header">
-          <div>
-            <div class="section-kicker">SECTION 102 • STANDARD RADIO TERMINOLOGY</div>
-            <h2 class="section-title">Standard 10-Codes Directory (Klik untuk Salin)</h2>
-          </div>
-          <div class="section-source">Ref: LSSD-DOC-SOP-00126 (102.1 – 102.3)</div>
-        </div>
-
-        <div class="filter-bar" id="tencodeFilters">
-          <button class="filter-btn active" data-filter="all">Semua (36)</button>
-          <button class="filter-btn" data-filter="emergency">Emergency & Crime</button>
-          <button class="filter-btn" data-filter="traffic">Traffic & Pursuit</button>
-          <button class="filter-btn" data-filter="status">Duty & Status</button>
-          <button class="filter-btn" data-filter="radio">General Radio</button>
-        </div>
-
-        <div class="tencode-grid" id="tencodeGrid"></div>
-      </section>
-
-      <!-- SECTION 103: RESPONSE & OPERATIONAL STATUS -->
-      <section id="response-codes" class="handbook-section">
-        <div class="section-header">
-          <div>
-            <div class="section-kicker">SECTION 103 • OTHER CODES</div>
-            <h2 class="section-title">Response & Operational Status Codes</h2>
-          </div>
-          <div class="section-source">Ref: LSSD-DOC-SOP-00126 (103.1 – 103.5)</div>
-        </div>
-
-        <div class="status-grid">
-          <div class="status-card code-0 searchable-item">
-            <span class="status-tag">CODE 0 • DANGEROUS SITUATION</span>
-            <h3 style="font-size:1rem; margin-bottom:6px;">All Units Respond</h3>
-            <p class="cmd-desc">Situasi sangat berbahaya yang membutuhkan respons segera seluruh unit tersedia. <strong>Otoritas pengerahan (deployment) dibatasi hanya untuk Sheriff / Undersheriff.</strong></p>
-          </div>
-
-          <div class="status-card code-2 searchable-item">
-            <span class="status-tag">CODE 2 • URGENT RESPONSE</span>
-            <h3 style="font-size:1rem; margin-bottom:6px;">Emergency Lights, No Siren</h3>
-            <p class="cmd-desc">Respons mendesak yang belum mencapai tingkat darurat penuh. Unit melaju menggunakan lampu rotator tanpa sirene dengan tetap memperhatikan kondisi lalu lintas.</p>
-          </div>
-
-          <div class="status-card code-3 searchable-item">
-            <span class="status-tag">CODE 3 • EMERGENCY RESPONSE</span>
-            <h3 style="font-size:1rem; margin-bottom:6px;">Emergency Lights & Siren</h3>
-            <p class="cmd-desc">Respons darurat penuh menggunakan lampu rotator dan sirene karena insiden membutuhkan penanganan segera. Dilarang disalahgunakan untuk prioritas lalu lintas pribadi.</p>
-          </div>
-
-          <div class="status-card code-4 searchable-item">
-            <span class="status-tag">CODE 4 • ALL CLEAR</span>
-            <h3 style="font-size:1rem; margin-bottom:6px;">Situation Clear</h3>
-            <p class="cmd-desc">Situasi dinyatakan aman/terkendali dan bantuan tambahan tidak lagi diperlukan. Unit dapat meninggalkan lokasi dan kembali ke status patroli semula.</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- SECTION 104: MIRANDA WARNING -->
-      <section id="miranda-warning" class="handbook-section">
-        <div class="section-header">
-          <div>
-            <div class="section-kicker">SECTION 104 • CUSTODIAL RIGHTS ADVISEMENT</div>
-            <h2 class="section-title">Miranda Warning</h2>
-          </div>
-          <div class="section-source">Ref: LSSD-DOC-SOP-00126 (104.1 – 104.4)</div>
-        </div>
-
-        <div class="policy-callout searchable-item">
-          <strong>104.1 & 104.4 Ketentuan Pembacaan:</strong> Wajib dibacakan secara jelas dan tidak tergesa-gesa sebelum <em>custodial interrogation</em>. Personel wajib memastikan tersangka memahami haknya (berikan klarifikasi bila belum paham) serta dilarang menggunakan paksaan, ancaman, atau intimidasi.
-        </div>
-
-        <div class="miranda-grid">
-          <div class="miranda-card searchable-item">
-            <div>
-              <div class="miranda-head">
-                <strong>104.2 — English Version</strong>
-                <span class="sec-ref">OFFICIAL</span>
-              </div>
-              <ol class="miranda-list" id="mirandaEnText">
-                <li>You have the right to remain silent.</li>
-                <li>Anything you say can and will be used against you in a court of law.</li>
-                <li>You have the right to an attorney.</li>
-                <li>If you can't afford an attorney, one will be provided for you.</li>
-                <li>Do you understand the rights I have just read to you?</li>
-              </ol>
-            </div>
-            <button class="btn-copy" onclick="copyMiranda('en')">Salin Miranda (English)</button>
-          </div>
-
-          <div class="miranda-card searchable-item">
-            <div>
-              <div class="miranda-head">
-                <strong>104.3 — Local Version (Bahasa Indonesia)</strong>
-                <span class="sec-ref">LOKAL</span>
-              </div>
-              <ol class="miranda-list" id="mirandaIdText">
-                <li>Anda berhak untuk tetap diam.</li>
-                <li>Apa pun yang Anda katakan dapat digunakan untuk melawan Anda di pengadilan.</li>
-                <li>Anda berhak mendapatkan bantuan seorang pengacara.</li>
-                <li>Jika Anda tidak mampu mendapatkan pengacara, seorang pengacara akan disediakan untuk Anda.</li>
-                <li>Apakah Anda memahami hak-hak yang baru saja saya jelaskan kepada Anda?</li>
-              </ol>
-            </div>
-            <button class="btn-copy" onclick="copyMiranda('id')">Salin Miranda (Indonesia)</button>
-          </div>
-        </div>
-      </section>
-
-      <!-- SECTION 105-106: RADIO DISCIPLINE & POLICY -->
-      <section id="radio-discipline" class="handbook-section">
-        <div class="section-header">
-          <div>
-            <div class="section-kicker">SECTION 105 – 106 • COMMUNICATION STANDARD & COMPLIANCE</div>
-            <h2 class="section-title">Disiplin Radio & Kepatuhan Kebijakan</h2>
-          </div>
-          <div class="section-source">Ref: LSSD-DOC-SOP-00126 (105.1 – 106.3)</div>
-        </div>
-
-        <div class="sop-grid">
-          <div class="sop-box searchable-item">
-            <h3>105 — Radio Communication Standard</h3>
-            <ul class="sop-list">
-              <li><strong>105.1 Professional Radio Conduct:</strong> Setiap transmisi wajib bersifat <em>clear, concise, professional, and operationally relevant</em>. Hindari obrolan pribadi, transmisi berulang, atau perdebatan.</li>
-              <li><strong>105.2 Emergency Traffic:</strong> Laporan <em>officer down, medic down, shots fired, pursuit, emergency assistance,</em> dan <em>dangerous situation</em> mendapat prioritas mutlak. Unit lain wajib menjaga saluran tetap bersih.</li>
-              <li><strong>105.3 Accuracy of Information:</strong> Dilarang menyampaikan informasi belum terverifikasi sebagai fakta. Bila terjadi kekeliruan, wajib segera dikoreksi melalui radio.</li>
-            </ul>
-          </div>
-
-          <div class="sop-box searchable-item">
-            <h3>106 — Policy Compliance & Authority</h3>
-            <ul class="sop-list">
-              <li><strong>106.1 Personnel Responsibility:</strong> Seluruh personel wajib menerapkan ketentuan Volume I sesuai pangkat dan penugasan; Supervisor bertanggung jawab mengawasi kepatuhan anggota di bawahnya.</li>
-              <li><strong>106.2 Unauthorized Use:</strong> Dilarang keras memakai callsign, designation, atau kode untuk menciptakan kesan otoritas palsu (<em>false impression of authority</em>) atau mengganggu komunikasi.</li>
-              <li><strong>106.3 Revision Authority:</strong> Perubahan permanen terhadap kode atau prosedur radio hanya dapat ditetapkan melalui arahan resmi Command Staff.</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <!-- PATROL OPERATIONS: SCOPE & JURISDICTION -->
-      <section id="patrol-operations" class="handbook-section">
-        <div class="section-header">
-          <div>
-            <div class="section-kicker">CHAPTER 2-06/000.00 – 020.00 • PATROL OPERATIONS HANDBOOK</div>
-            <h2 class="section-title">Fungsi Utama & Yurisdiksi Patrol Operations</h2>
-          </div>
-          <div class="section-source">Ref: LSSD-DOC-SOP-00226</div>
-        </div>
-
-        <div class="sop-grid">
-          <div class="sop-box searchable-item">
-            <h3>2-06/010.00 — Fungsi & Tanggung Jawab</h3>
-            <ul class="sop-list">
-              <li>Melindungi jiwa, menjaga ketertiban umum, mencegah kejahatan, dan merespons panggilan darurat maupun non-darurat.</li>
-              <li>Melakukan pemeriksaan awal TKP, mengamankan lokasi dan barang bukti awal, serta melakukan penangkapan sesuai dasar hukum.</li>
-              <li><strong>Fungsi Khusus:</strong> Traffic Enforcement, Emergency Response, Criminal Suppression, High-Risk Calls, Search and Rescue, Perimeter Security, Public Event Security, dan Backup unit lain.</li>
-            </ul>
-          </div>
-
-          <div class="sop-box searchable-item">
-            <h3>2-06/020.00 & 030.35 — Yurisdiksi & Interagency</h3>
-            <ul class="sop-list">
-              <li><strong>Dasar Tindakan:</strong> Department jurisdiction, County jurisdiction, Mutual aid agreement, Request for assistance, Emergency circumstances, dan Hot pursuit.</li>
-              <li><strong>Lintas Yurisdiksi:</strong> Wajib menghormati kewenangan agensi setempat dan berkoordinasi saat memasuki wilayah luar yurisdiksi utama.</li>
-              <li><strong>Mutual Aid (030.35):</strong> Mendukung LSPD, Fire Dept, EMS, dan agensi Federal/County dengan mengikuti struktur <em>Unified Command</em>.</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <!-- FIELD PROCEDURES: SCENE, TRAFFIC, DETECTIVE & MDT -->
-      <section id="field-procedures" class="handbook-section">
-        <div class="section-header">
-          <div>
-            <div class="section-kicker">CHAPTER 2-06/030.00 – 030.20 • STANDARD FIELD PROCEDURES</div>
-            <h2 class="section-title">Prosedur Lapangan, Lalu Lintas & Laporan MDT</h2>
-          </div>
-          <div class="section-source">Ref: LSSD-DOC-SOP-00226</div>
-        </div>
-
-        <div class="sop-grid">
-          <div class="sop-box searchable-item">
-            <h3>9 Langkah Scene Management (030.05)</h3>
-            <ol class="sop-list">
-              <li>Menilai kondisi lokasi kejadian secara menyeluruh.</li>
-              <li>Memastikan keselamatan masyarakat dan petugas.</li>
-              <li>Menentukan kebutuhan unit <em>backup</em>.</li>
-              <li>Mengamankan perimeter lokasi kejadian.</li>
-              <li>Mengidentifikasi korban, saksi, dan tersangka.</li>
-              <li>Menjaga keutuhan barang bukti (<em>chain of custody</em>).</li>
-              <li>Melakukan investigasi awal di lapangan.</li>
-              <li>Menghubungi unit khusus apabila diperlukan.</li>
-              <li>Menyerahkan penanganan kasus lanjutan ke unit berwenang.</li>
-            </ol>
-          </div>
-
-          <div class="sop-box searchable-item">
-            <h3>Traffic Stop & Pursuit Standards (030.10)</h3>
-            <ul class="sop-list">
-              <li><strong>7 Tahap Traffic Stop:</strong> (1) Pilih lokasi aman, (2) Beri instruksi jelas ke pengemudi, (3) Jelaskan alasan pemberhentian, (4) Periksa dokumen wajib, (5) Pemeriksaan lanjutan bila ada dasar hukum, (6) Tentukan tindakan (<em>warning/citation/arrest</em>), (7) Dokumentasi.</li>
-              <li><strong>Pertimbangan Pursuit:</strong> Tingkat kejahatan, kecepatan, kondisi jalan, kepadatan lalu lintas, risiko publik, cuaca, dan ketersediaan unit. Supervisor berhak mengambil alih atau menghentikan <em>pursuit</em>.</li>
-            </ul>
-          </div>
-
-          <div class="sop-box searchable-item">
-            <h3>Detective Referral Criteria (030.15)</h3>
-            <ul class="sop-list">
-              <li>Patrol Deputy menangani <em>initial investigation</em> (korban, saksi, tersangka, rekaman CCTV, barang bukti awal).</li>
-              <li><strong>Wajib Referral ke Detective Division</strong> bila kasus membutuhkan <em>follow-up investigation</em>, bukti kompleks, jaringan kriminal, wawancara lanjutan, kasus serius, atau atas instruksi supervisor.</li>
-            </ul>
-          </div>
-
-          <div class="sop-box searchable-item">
-            <h3>8 Jenis Laporan Wajib MDT (030.20)</h3>
-            <p class="cmd-desc" style="margin-bottom:8px;">Setiap laporan wajib objektif, lengkap, akurat, dan diinput ke dalam <strong>Mobile Database Terminal (MDT)</strong>:</p>
-            <div class="pill-tags">
-              <span class="pill-tag">Arrest Report</span>
-              <span class="pill-tag">Incident Report</span>
-              <span class="pill-tag">Crime Report</span>
-              <span class="pill-tag">Traffic Collision Report</span>
-              <span class="pill-tag">Use of Force Report</span>
-              <span class="pill-tag">Pursuit Report</span>
-              <span class="pill-tag">Property/Evidence Report</span>
-              <span class="pill-tag">Supplementary Report</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- PATROL PRIORITY RESPONSE -->
-      <section id="priority-response" class="handbook-section">
-        <div class="section-header">
-          <div>
-            <div class="section-kicker">CHAPTER 2-06/030.25 • CALL CLASSIFICATION</div>
-            <h2 class="section-title">Patrol Priority Response Matrix</h2>
-          </div>
-          <div class="section-source">Ref: LSSD-DOC-SOP-00226 (030.25)</div>
-        </div>
-
-        <div class="status-grid">
-          <div class="status-card prio-1 searchable-item">
-            <span class="status-tag">PRIORITY 1 • EMERGENCY</span>
-            <h3 style="font-size:1rem; margin-bottom:8px;">Immediate Response</h3>
-            <p class="cmd-desc" style="margin-bottom:8px;">Ancaman langsung terhadap nyawa atau keselamatan:</p>
-            <ul class="sop-list">
-              <li>Shots fired & Officer down (10-13)</li>
-              <li>Active violent suspect & Hostage situation</li>
-              <li>Major armed robbery</li>
-              <li>Life-threatening emergency</li>
-              <li>Kidnapping of Government Employee</li>
-            </ul>
-          </div>
-
-          <div class="status-card prio-2 searchable-item">
-            <span class="status-tag">PRIORITY 2 • URGENT</span>
-            <h3 style="font-size:1rem; margin-bottom:8px;">Prompt Response</h3>
-            <p class="cmd-desc" style="margin-bottom:8px;">Butuh respons cepat tanpa ancaman langsung terhadap nyawa:</p>
-            <ul class="sop-list">
-              <li>Burglary in progress & Vehicle pursuit</li>
-              <li>Assault in progress</li>
-              <li>Suspicious armed individual</li>
-              <li>Domestic disturbance</li>
-              <li>Major traffic collision</li>
-            </ul>
-          </div>
-
-          <div class="status-card prio-3 searchable-item">
-            <span class="status-tag">PRIORITY 3 • ROUTINE</span>
-            <h3 style="font-size:1rem; margin-bottom:8px;">Routine Response (Unit Availability)</h3>
-            <p class="cmd-desc" style="margin-bottom:8px;">Kejadian non-darurat berdasarkan ketersediaan unit:</p>
-            <ul class="sop-list">
-              <li>Minor traffic complaint & Noise complaint</li>
-              <li>Civil dispute & Property complaint</li>
-              <li>Delayed theft report</li>
-              <li>General public assistance</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <!-- CONDUCT, SHIFT & PERFORMANCE -->
-      <section id="conduct-shift" class="handbook-section">
-        <div class="section-header">
-          <div>
-            <div class="section-kicker">CHAPTER 2-06/040.00 – 070.00 • ETHICS & SHIFT CYCLE</div>
-            <h2 class="section-title">Patrol Conduct, Shift Operations & Performance</h2>
-          </div>
-          <div class="section-source">Ref: LSSD-DOC-SOP-00226</div>
-        </div>
-
-        <div class="sop-grid">
-          <div class="sop-box searchable-item">
-            <h3>10 Kewajiban Patrol Conduct (050.00)</h3>
-            <ol class="sop-list">
-              <li>Mematuhi <em>chain of command</em>.</li>
-              <li>Mematuhi seluruh Department SOP.</li>
-              <li>Menjaga disiplin komunikasi radio.</li>
-              <li>Menggunakan kendaraan dinas secara bertanggung jawab.</li>
-              <li>Menggunakan kekuatan secara proporsional.</li>
-              <li>Menjaga profesionalisme terhadap masyarakat (040.00).</li>
-              <li>Menghormati agensi/departemen lain.</li>
-              <li>Menjaga integritas dan keakuratan laporan.</li>
-              <li>Tidak menyalahgunakan kewenangan.</li>
-              <li>Mengutamakan keselamatan publik (<em>wajib lapor pelanggaran ke Chain of Command / Internal Affairs</em>).</li>
-            </ol>
-          </div>
-
-          <div class="sop-box searchable-item">
-            <h3>4 Tahap Patrol Shift & Penilaian (060.00 – 070.00)</h3>
-            <ul class="sop-list">
-              <li><strong>1. Roll Call / Briefing:</strong> Cek personel, perlengkapan, kendaraan, kondisi wilayah, BOLO, <em>wanted persons</em>, dan prioritas tugas.</li>
-              <li><strong>2. Patrol Deployment:</strong> Penempatan unit sesuai kebutuhan wilayah dengan pengawasan supervisor.</li>
-              <li><strong>3. Calls for Service:</strong> Merespons panggilan, menangani insiden, membuat laporan, dan melakukan <em>follow-up</em>.</li>
-              <li><strong>4. End-of-Shift:</strong> Menyelesaikan laporan, mengembalikan peralatan, cek kendaraan, serah terima info ke <em>incoming shift</em>, dan <em>debrief</em>.</li>
-              <li><strong>Standard of Performance (070.00):</strong> Dinilai dari kualitas pelayanan publik, kepatuhan SOP, disiplin radio, keputusan lapangan, dan kerja sama tim — <strong>bukan</strong> semata jumlah penangkapan atau tilang.</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-    </main>
-  </div>
-
-  <!-- Toast Notification -->
-  <div class="toast" id="toast">Tersalin ke clipboard</div>
-
-  <script>
-    // Complete 10-Codes Dataset from LSSD-DOC-SOP-00126 Section 102.2
-    const TEN_CODES = [
-      { code: "10-1", meaning: "Meet Me At", category: "radio", emergency: false },
-      { code: "10-2", meaning: "Good Signal", category: "radio", emergency: false },
-      { code: "10-3", meaning: "Stop Transmission", category: "radio", emergency: true },
-      { code: "10-4", meaning: "Ok / Message Received", category: "radio", emergency: false },
-      { code: "10-7", meaning: "Not in Service", category: "status", emergency: false },
-      { code: "10-8", meaning: "Back in Service", category: "status", emergency: false },
-      { code: "10-9", meaning: "Repeat", category: "radio", emergency: false },
-      { code: "10-10", meaning: "Fight in Progress", category: "emergency", emergency: true },
-      { code: "10-11", meaning: "Someone With Firearms", category: "emergency", emergency: true },
-      { code: "10-12", meaning: "Stand By", category: "radio", emergency: false },
-      { code: "10-13", meaning: "Officer Down", category: "emergency", emergency: true },
-      { code: "10-14", meaning: "Medic Down", category: "emergency", emergency: true },
-      { code: "10-20", meaning: "Location", category: "radio", emergency: false },
-      { code: "10-23", meaning: "Arrive on Location", category: "status", emergency: false },
-      { code: "10-31A", meaning: "Burglary - House", category: "emergency", emergency: false },
-      { code: "10-31B", meaning: "Robbery - Store", category: "emergency", emergency: true },
-      { code: "10-34", meaning: "Illegal Activity", category: "emergency", emergency: false },
-      { code: "10-38", meaning: "Felony Traffic Stop", category: "traffic", emergency: true },
-      { code: "10-41", meaning: "On-Duty", category: "status", emergency: false },
-      { code: "10-42", meaning: "Off-Duty", category: "status", emergency: false },
-      { code: "10-47", meaning: "Injured Person", category: "emergency", emergency: false },
-      { code: "10-50", meaning: "Accident", category: "traffic", emergency: false },
-      { code: "10-52", meaning: "Need EMS", category: "emergency", emergency: true },
-      { code: "10-55", meaning: "Traffic Stop", category: "traffic", emergency: false },
-      { code: "10-57", meaning: "Pursuit in Progress", category: "traffic", emergency: true },
-      { code: "10-60", meaning: "Vehicle Description", category: "traffic", emergency: false },
-      { code: "10-61", meaning: "Person Description", category: "radio", emergency: false },
-      { code: "10-71", meaning: "Shots Fired", category: "emergency", emergency: true },
-      { code: "10-76", meaning: "En Route", category: "status", emergency: false },
-      { code: "10-77", meaning: "Need Assistance - Non Emergency", category: "status", emergency: false },
-      { code: "10-78", meaning: "Need Assistance - Emergency", category: "emergency", emergency: true },
-      { code: "10-80", meaning: "Felony Stop", category: "traffic", emergency: true },
-      { code: "10-90", meaning: "Bank Robbery", category: "emergency", emergency: true },
-      { code: "10-94", meaning: "Illegal Racing", category: "traffic", emergency: false },
-      { code: "10-95", meaning: "Suspect in Custody", category: "status", emergency: false },
-      { code: "10-99", meaning: "Investigation Area", category: "status", emergency: false }
-    ];
-
-    const tencodeGrid = document.getElementById("tencodeGrid");
-    const filterButtons = document.querySelectorAll("#tencodeFilters .filter-btn");
-    const globalSearch = document.getElementById("globalSearch");
-    const searchStatus = document.getElementById("searchStatus");
-    const searchStatusText = document.getElementById("searchStatusText");
-    const clearSearchBtn = document.getElementById("clearSearchBtn");
-    const toast = document.getElementById("toast");
-
-    let activeCategory = "all";
-
-    function showToast(message) {
-      toast.textContent = message;
-      toast.classList.add("show");
-      clearTimeout(window.__toastTimer);
-      window.__toastTimer = setTimeout(() => {
-        toast.classList.remove("show");
-      }, 2200);
-    }
-
-    function copyText(text, label) {
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(() => {
-          showToast(label || `Tersalin: ${text}`);
-        });
-      } else {
-        const temp = document.createElement("textarea");
-        temp.value = text;
-        document.body.appendChild(temp);
-        temp.select();
-        document.execCommand("copy");
-        document.body.removeChild(temp);
-        showToast(label || `Tersalin: ${text}`);
-      }
-    }
-
-    function renderTenCodes() {
-      const query = globalSearch.value.trim().toLowerCase();
-      tencodeGrid.innerHTML = "";
-
-      TEN_CODES.forEach((item) => {
-        const matchesCat = activeCategory === "all" || item.category === activeCategory;
-        const matchesQuery =
-          !query ||
-          item.code.toLowerCase().includes(query) ||
-          item.meaning.toLowerCase().includes(query);
-
-        if (!matchesCat || !matchesQuery) return;
-
-        const card = document.createElement("div");
-        card.className = `tencode-item ${item.emergency ? "emergency" : ""}`;
-        card.title = "Klik untuk menyalin kode";
-        card.innerHTML = `
-          <span class="tencode-code">${item.code}</span>
-          <span class="tencode-meaning">${item.meaning}</span>
-        `;
-        card.addEventListener("click", () => {
-          copyText(`${item.code} (${item.meaning})`, `Tersalin: ${item.code} — ${item.meaning}`);
-        });
-        tencodeGrid.appendChild(card);
-      });
-    }
-
-    filterButtons.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        filterButtons.forEach((b) => b.classList.remove("active"));
-        btn.classList.add("active");
-        activeCategory = btn.dataset.filter;
-        renderTenCodes();
-      });
-    });
-
-    function runGlobalSearch() {
-      const query = globalSearch.value.trim().toLowerCase();
-      const items = document.querySelectorAll(".searchable-item");
-      let visibleCount = 0;
-
-      items.forEach((el) => {
-        const text = el.textContent.toLowerCase();
-        if (!query || text.includes(query)) {
-          el.classList.remove("hidden-by-search");
-          visibleCount++;
-        } else {
-          el.classList.add("hidden-by-search");
-        }
-      });
-
-      renderTenCodes();
-
-      if (query) {
-        searchStatus.classList.add("visible");
-        searchStatusText.textContent = `Filter aktif untuk "${globalSearch.value.trim()}"`;
-      } else {
-        searchStatus.classList.remove("visible");
-      }
-    }
-
-    globalSearch.addEventListener("input", runGlobalSearch);
-
-    clearSearchBtn.addEventListener("click", () => {
-      globalSearch.value = "";
-      runGlobalSearch();
-      globalSearch.focus();
-    });
-
-    // Copy Miranda Warning Helper
-    window.copyMiranda = function (lang) {
-      const listId = lang === "en" ? "mirandaEnText" : "mirandaIdText";
-      const lines = Array.from(document.querySelectorAll(`#${listId} li`))
-        .map((li, idx) => `${idx + 1}. ${li.textContent.trim()}`)
-        .join("\n");
-      const label = lang === "en" ? "Miranda Warning (English) disalin!" : "Miranda Warning (Indonesia) disalin!";
-      copyText(lines, label);
-    };
-
-    // Mobile Sidebar Controls
-    const sidebar = document.getElementById("sidebar");
-    const sidebarOverlay = document.getElementById("sidebarOverlay");
-    const menuToggle = document.getElementById("menuToggle");
-
-    function closeMobileMenu() {
-      sidebar.classList.remove("open");
-      sidebarOverlay.classList.remove("open");
-    }
-
-    menuToggle.addEventListener("click", () => {
-      sidebar.classList.toggle("open");
-      sidebarOverlay.classList.toggle("open");
-    });
-
-    sidebarOverlay.addEventListener("click", closeMobileMenu);
-
-    // Hash Navigation & Active Link Sync
-    const navLinks = document.querySelectorAll(".nav-link");
-    const sections = document.querySelectorAll(".handbook-section");
-
-    function setActiveNav(hash) {
-      if (!hash) return;
-      navLinks.forEach((link) => {
-        link.classList.toggle("active", link.getAttribute("href") === hash);
-      });
-    }
-
-    navLinks.forEach((link) => {
-      link.addEventListener("click", () => {
-        setActiveNav(link.getAttribute("href"));
-        closeMobileMenu();
-      });
-    });
-
-    window.addEventListener("hashchange", () => {
-      setActiveNav(window.location.hash);
-    });
-
-    // Scroll Spy
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const id = `#${entry.target.id}`;
-            setActiveNav(id);
-            history.replaceState(null, "", id);
-          }
-        });
-      },
-      { rootMargin: "-20% 0px -65% 0px", threshold: 0.05 }
-    );
-
-    sections.forEach((sec) => observer.observe(sec));
-
-    // Keyboard Shortcuts ('/' to search, 'Escape' to clear/close)
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "/" && document.activeElement !== globalSearch) {
-        e.preventDefault();
-        globalSearch.focus();
-      } else if (e.key === "Escape") {
-        closeMobileMenu();
-        if (globalSearch.value) {
-          globalSearch.value = "";
-          runGlobalSearch();
-        }
-      }
-    });
-
-    // Initial Render & Hash Check
-    renderTenCodes();
-    if (window.location.hash) {
-      setActiveNav(window.location.hash);
-      const target = document.querySelector(window.location.hash);
-      if (target) {
-        setTimeout(() => target.scrollIntoView({ behavior: "smooth" }), 80);
-      }
-    }
-  </script>
+    <script src="./script.js"></script>
 </body>
 </html>
