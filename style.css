@@ -1,0 +1,736 @@
+/* ==========================================================================
+   DESIGN TOKENS: DARK GRAPHITE, CONDENSED TYPOGRAPHY, THIN BORDERS
+   ========================================================================== */
+:root {
+    --bg-canvas: #121315;        /* Deep Graphite Canvas */
+    --bg-surface: #181a1d;       /* Card / Sidebar Surface */
+    --bg-elevated: #202327;      /* Table Header / Meta Strip */
+    --border-thin: #2c3035;      /* 1px Technical Divider */
+    --border-active: #464c54;    /* Hover / Active Border */
+
+    --text-primary: #eceef0;     /* High Contrast Off-White */
+    --text-secondary: #9ba1a8;   /* Body Gray */
+    --text-muted: #697077;       /* Stamps & Labels */
+
+    --lssd-gold: #c8a252;        /* Official LSSD Star Gold */
+    --lssd-gold-bg: rgba(200, 162, 82, 0.1);
+    --alert-red: #c94a4a;        /* 10-99 Emergency Accent */
+
+    --font-condensed: 'Barlow Condensed', sans-serif;
+    --font-sans: 'Inter', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+
+    --sidebar-width: 290px;
+}
+
+/* ==========================================================================
+   RESET & BASE
+   ========================================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--bg-canvas);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    font-size: 14.5px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.mono {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--lssd-gold);
+}
+
+/* ==========================================================================
+   MOBILE HEADER (HIDDEN ON DESKTOP)
+   ========================================================================== */
+.mobile-header {
+    display: none;
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    background-color: var(--bg-surface);
+    border-bottom: 1px solid var(--border-thin);
+    padding: 12px 18px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.mobile-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-condensed);
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+}
+
+.mobile-logo {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+}
+
+.hamburger-btn {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-active);
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    cursor: pointer;
+}
+
+.hamburger-btn span {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background-color: var(--text-primary);
+}
+
+/* ==========================================================================
+   LAYOUT ARCHITECTURE (SIDEBAR + MAIN DOCUMENT)
+   ========================================================================== */
+.app-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Left Fixed Sidebar */
+.sidebar {
+    width: var(--sidebar-width);
+    background-color: var(--bg-surface);
+    border-right: 1px solid var(--border-thin);
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    z-index: 150;
+    overflow-y: auto;
+}
+
+.sidebar-top {
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--border-thin);
+}
+
+.doc-serial {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    color: var(--lssd-gold);
+    letter-spacing: 0.06em;
+    margin-bottom: 12px;
+}
+
+.sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.sidebar-logo {
+    width: 44px;
+    height: 44px;
+    object-fit: contain;
+}
+
+.sidebar-title {
+    font-family: var(--font-condensed);
+    font-size: 19px;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: 0.03em;
+}
+
+.sidebar-subtitle {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-secondary);
+    letter-spacing: 0.05em;
+    margin-top: 2px;
+}
+
+/* Sidebar Search */
+.sidebar-search {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border-thin);
+    background-color: #15171a;
+}
+
+.search-label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 0.06em;
+    margin-bottom: 6px;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    background-color: var(--bg-canvas);
+    border: 1px solid var(--border-active);
+    padding: 0 8px;
+}
+
+.search-box input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    font-size: 13px;
+    padding: 8px 4px;
+    outline: none;
+}
+
+.search-box button {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 12px;
+    padding: 4px;
+}
+
+.search-box button:hover {
+    color: var(--text-primary);
+}
+
+.search-status {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-secondary);
+    margin-top: 6px;
+}
+
+/* Sidebar Navigation */
+.sidebar-nav {
+    padding: 16px 0;
+    flex: 1;
+}
+
+.nav-group-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    padding: 0 20px 10px;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 20px;
+    border-left: 3px solid transparent;
+    color: var(--text-secondary);
+    font-family: var(--font-condensed);
+    font-size: 16px;
+    letter-spacing: 0.03em;
+    transition: background-color 0.12s ease, color 0.12s ease;
+}
+
+.nav-link:hover {
+    background-color: var(--bg-elevated);
+    color: var(--text-primary);
+}
+
+.nav-link.active {
+    background-color: var(--lssd-gold-bg);
+    border-left-color: var(--lssd-gold);
+    color: var(--text-primary);
+}
+
+.doc-num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--lssd-gold);
+}
+
+.sidebar-footer {
+    padding: 14px 20px;
+    border-top: 1px solid var(--border-thin);
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+
+.sidebar-footer strong {
+    color: var(--text-secondary);
+}
+
+/* ==========================================================================
+   MAIN DOCUMENT AREA
+   ========================================================================== */
+.main-content {
+    margin-left: var(--sidebar-width);
+    flex: 1;
+    max-width: 1040px;
+    padding: 0 36px 60px;
+}
+
+.top-strip {
+    display: flex;
+    justify-content: space-between;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border-thin);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.doc-section {
+    padding: 44px 0;
+    border-bottom: 1px solid var(--border-thin);
+}
+
+.section-meta-bar {
+    display: flex;
+    justify-content: space-between;
+    background-color: var(--bg-elevated);
+    border: 1px solid var(--border-thin);
+    padding: 6px 12px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+}
+
+.section-heading {
+    font-family: var(--font-condensed);
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.section-lead {
+    color: var(--text-secondary);
+    max-width: 760px;
+    margin-bottom: 26px;
+}
+
+/* ==========================================================================
+   SECTION 00: HOMEPAGE COVER WITH LSSD BADGE
+   ========================================================================== */
+.cover-container {
+    display: flex;
+    align-items: center;
+    gap: 36px;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-thin);
+    padding: 32px;
+}
+
+.cover-emblem {
+    flex-shrink: 0;
+    width: 190px;
+    height: 190px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bg-canvas);
+    border: 1px solid var(--border-thin);
+    padding: 16px;
+}
+
+.cover-emblem img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.cover-agency {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--lssd-gold);
+    letter-spacing: 0.08em;
+    margin-bottom: 6px;
+}
+
+.cover-title {
+    font-family: var(--font-condensed);
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: 0.02em;
+    margin-bottom: 14px;
+}
+
+.cover-desc {
+    color: var(--text-secondary);
+    margin-bottom: 22px;
+}
+
+.cover-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.btn-official {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    padding: 10px 18px;
+    border: 1px solid var(--border-active);
+    transition: background-color 0.15s ease;
+}
+
+.btn-primary {
+    background-color: var(--lssd-gold);
+    color: #111214;
+    border-color: var(--lssd-gold);
+}
+
+.btn-primary:hover {
+    background-color: #d6b163;
+}
+
+.btn-outline {
+    background-color: var(--bg-elevated);
+    color: var(--text-primary);
+}
+
+.btn-outline:hover {
+    border-color: var(--text-primary);
+}
+
+.cover-specs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border-thin);
+}
+
+.spec-key {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-muted);
+}
+
+.spec-val {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   SECTION 01: CHAIN OF COMMAND TABLES
+   ========================================================================== */
+.tier-block {
+    margin-bottom: 26px;
+    border: 1px solid var(--border-thin);
+    background-color: var(--bg-surface);
+}
+
+.tier-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    background-color: var(--bg-elevated);
+    border-bottom: 1px solid var(--border-thin);
+}
+
+.tier-code {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    background-color: var(--lssd-gold-bg);
+    color: var(--lssd-gold);
+    border: 1px solid var(--lssd-gold);
+    padding: 2px 7px;
+}
+
+.tier-name {
+    font-family: var(--font-condensed);
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+}
+
+.doc-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.doc-table th {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border-thin);
+    background-color: #15171a;
+}
+
+.doc-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border-thin);
+    vertical-align: top;
+    color: var(--text-secondary);
+}
+
+.doc-table td strong {
+    color: var(--text-primary);
+}
+
+.doc-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* ==========================================================================
+   SECTION 02: 10-CODES GRID
+   ========================================================================== */
+.codes-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+}
+
+.code-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-thin);
+    padding: 14px 16px;
+}
+
+.code-badge {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--lssd-gold);
+    background-color: var(--bg-canvas);
+    border: 1px solid var(--border-active);
+    padding: 5px 10px;
+    min-width: 64px;
+    text-align: center;
+}
+
+.code-badge.code-alert {
+    color: #f2b8b8;
+    border-color: var(--alert-red);
+    background-color: rgba(201, 74, 74, 0.15);
+}
+
+.code-detail strong {
+    display: block;
+    font-family: var(--font-condensed);
+    font-size: 16px;
+    letter-spacing: 0.02em;
+    color: var(--text-primary);
+    margin-bottom: 3px;
+}
+
+.code-detail span {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+}
+
+/* ==========================================================================
+   SECTION 03 & 04: SOP & MIRANDA
+   ========================================================================== */
+.sop-list {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.sop-item {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-thin);
+    padding: 20px;
+}
+
+.sop-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid var(--border-thin);
+}
+
+.sop-num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--lssd-gold);
+    border: 1px solid var(--border-active);
+    padding: 2px 8px;
+}
+
+.sop-header h3 {
+    font-family: var(--font-condensed);
+    font-size: 20px;
+    letter-spacing: 0.02em;
+}
+
+.sop-steps {
+    padding-left: 20px;
+    color: var(--text-secondary);
+}
+
+.sop-steps li {
+    margin-bottom: 8px;
+}
+
+.sop-steps li strong {
+    color: var(--text-primary);
+}
+
+.miranda-box {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-active);
+    border-left: 4px solid var(--lssd-gold);
+    padding: 20px 24px;
+}
+
+.miranda-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--lssd-gold);
+    margin-bottom: 10px;
+}
+
+.miranda-box p {
+    font-size: 15px;
+    color: var(--text-primary);
+    font-style: italic;
+}
+
+/* ==========================================================================
+   SECTION 05: ABOUT & FOOTER
+   ========================================================================== */
+.about-box {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-thin);
+    padding: 22px;
+    color: var(--text-secondary);
+}
+
+.about-grid-meta {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border-thin);
+}
+
+.meta-label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-muted);
+}
+
+.meta-data {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-primary);
+}
+
+.doc-footer {
+    margin-top: 32px;
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+/* Utility class for search filtering */
+.hidden-by-search {
+    display: none !important;
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN (TABLET & MOBILE)
+   ========================================================================== */
+@media (max-width: 960px) {
+    .mobile-header {
+        display: flex;
+    }
+
+    .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.2s ease;
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .sidebar-backdrop {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.65);
+        z-index: 140;
+    }
+
+    .sidebar-backdrop.open {
+        display: block;
+    }
+
+    .main-content {
+        margin-left: 0;
+        padding: 0 18px 48px;
+    }
+
+    .cover-container {
+        flex-direction: column;
+        text-align: center;
+        padding: 24px 18px;
+    }
+
+    .cover-actions {
+        justify-content: center;
+    }
+
+    .cover-specs,
+    .codes-grid,
+    .about-grid-meta {
+        grid-template-columns: 1fr;
+    }
+
+    .top-strip,
+    .doc-footer {
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .doc-table {
+        display: block;
+        overflow-x: auto;
+    }
+}
